@@ -46,7 +46,7 @@
       },
       "DATABASE_URI": {
         "description": "Mongo DB database URI , get from https://cloud.mongodb.com, even if this is optional, many of functions may not work if this is not set.",
-        "value": "mongodb+srv://sunnymusic:Tronghuong@2015@cluster0.p7afj.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+        "value": "mongodb+srv://sunnymusic:Tronghuong@2015@cluster0.p7afj.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 		"required": false
       },
       "ADMINS": {
