@@ -46,8 +46,7 @@
       },
       "DATABASE_URI": {
         "description": "Mongo DB database URI , get from https://cloud.mongodb.com, even if this is optional, many of functions may not work if this is not set.",
-		"value": ""
-		"required": false
+        "required": false
       },
       "ADMINS": {
         "description": "ID of Users who can use Admin commands(for multiple users seperated by space)",
@@ -71,11 +70,11 @@
         "value": "https://youtu.be/KpbL4wuY1TY",
         "required": false
       },
-	   "REPLY_MESSAGE": {
+      "REPLY_MESSAGE": {
         "description": "A reply message to those who message the USER account in PM. Make it blank if you do not need this feature.",
-        "value": "Hi anh %name%, Mời a vào nhóm chat tâm sự ạ ↴<t.me/joinchat/YLUygKwYzP0wMGJl",
+        "value": "Hi anh, Mời a vào nhóm chat tâm sự ạ ↴<t.me/joinchat/YLUygKwYzP0wMGJl",
         "required": false
-	  }
+      }
     },
     "formation": {
       "worker": {

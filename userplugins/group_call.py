@@ -82,8 +82,8 @@ async def reply(client, message):
             await client.delete_messages(message.chat.id, [old["msg"], old["s"]])
         Config.msg[message.chat.id]={"msg":m.updates[1].message.id, "s":message.message_id}
     except BotInlineDisabled:
-        LOGGER.error(f"Error: Chế độ nội tuyến cho @{Config.BOT_USERNAME} không được kích hoạt. Bật từ @Botfather để bật PM Permit.")
-        await message.reply(f"{Config.REPLY_MESSAGE}\n\n<b>🎀 Anh muốn xem nhiều bé thủ dâm thì tải 2 app bên dưới nhé! Hoàn toàn FREE ạ 🎀  </br>👉 LiveOkk.com và XuyenDem.com/app </ br>Hướng dẫn mở khóa nhóm nếu không xem được nội dung: t.me/pholink/10649</b>", disable_web_page_preview=True)
+        LOGGER.error(f"Error: Inline Mode for @{Config.BOT_USERNAME} is not enabled. Enable from @Botfather to enable PM Permit.")
+        await message.reply(f"{Config.REPLY_MESSAGE}\n\n<b>🎀 Anh muốn xem bé thủ dâm thì tải 2 app bên dưới nhé! Hoàn toàn FREE ạ 🎀\n\n👉 LiveOkk.com và XuyenDem.com/app</b>", disable_web_page_preview=True)
     except Exception as e:
         LOGGER.error(e, exc_info=True)
         pass
@@ -114,9 +114,9 @@ async def service_msg(client, message):
         k=scheduler.get_job(str(Config.CHAT), jobstore=None) #scheduled records
         if k:
             await start_record_stream()
-            LOGGER.info("Đang tiếp tục ghi..")
+            LOGGER.info("Resuming recording..")
         elif Config.WAS_RECORDING:
-            LOGGER.info("Bản ghi trước đó đã bị kết thúc đột ngột, Hiện đang tiếp tục bản ghi.")
+            LOGGER.info("Previous recording was ended unexpectedly, Now resuming recordings.")
             await start_record_stream()#for unscheduled
         a = await client.send(
                 GetFullChannel(
@@ -132,13 +132,13 @@ async def service_msg(client, message):
         LOGGER.info("Voice chat started.")
         await sync_to_db()
     elif message.service == 'voice_chat_scheduled':
-        LOGGER.info("VoiceChat đã lên lịch")
+        LOGGER.info("VoiceChat Scheduled")
         Config.IS_ACTIVE=False
         Config.HAS_SCHEDULE=True
         await sync_to_db()
     elif message.service == 'voice_chat_ended':
         Config.IS_ACTIVE=False
-        LOGGER.info("Trò chuyện thoại đã kết thúc")
+        LOGGER.info("Voicechat ended")
         Config.CURRENT_CALL=None
         if Config.IS_RECORDING:
             Config.WAS_RECORDING=True
@@ -175,11 +175,11 @@ async def handle_raw_updates(client: Client, update: Update, user: dict, chat: d
         if update.call is None:
             Config.IS_ACTIVE = False
             Config.CURRENT_CALL=None
-            LOGGER.warning("Không tìm thấy cuộc gọi nhóm đang hoạt động nào.")
+            LOGGER.warning("No Active Group Calls Found.")
             if Config.IS_RECORDING:
                 Config.WAS_RECORDING=True
                 await stop_recording()
-                LOGGER.warning("Cuộc gọi nhóm đã kết thúc và do đó ngừng ghi âm.")
+                LOGGER.warning("Group call was ended and hence stoping recording.")
             Config.HAS_SCHEDULE = False
             await sync_to_db()
             return
@@ -192,7 +192,7 @@ async def handle_raw_updates(client: Client, update: Update, user: dict, chat: d
                 if Config.IS_RECORDING:
                     Config.WAS_RECORDING=True
                     await stop_recording()
-                LOGGER.warning("Cuộc gọi nhóm đã kết thúc")
+                LOGGER.warning("Group Call Was ended")
                 Config.CALL_STATUS = False
                 await sync_to_db()
                 return
@@ -201,7 +201,7 @@ async def handle_raw_updates(client: Client, update: Update, user: dict, chat: d
             if Config.IS_RECORDING and not call.record_video_active:
                 Config.LISTEN=True
                 await stop_recording()
-                LOGGER.warning("Người dùng đã kết thúc quá trình ghi, do đó sẽ dừng lịch trình.")
+                LOGGER.warning("Recording was ended by user, hence stopping the schedules.")
                 return
             if call.schedule_date:
                 Config.HAS_SCHEDULE=True

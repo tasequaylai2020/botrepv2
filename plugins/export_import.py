@@ -50,7 +50,7 @@ async def export_play_list(client, message: Message):
     file=f"{message.chat.id}_{message.message_id}.json"
     with open(file, 'w+') as outfile:
         json.dump(Config.playlist, outfile, indent=4)
-    await client.send_document(chat_id=message.chat.id, document=file, file_name="PlayList.json", caption=f"Playlist\n\nNumber Of Songs: <code>{len(Config.playlist)}</code>\n\nJoin [Yêu 69](https://t.me/yeu69)")
+    await client.send_document(chat_id=message.chat.id, document=file, file_name="PlayList.json", caption=f"Playlist\n\nNumber Of Songs: <code>{len(Config.playlist)}</code>\n\nJoin [XTZ Bots](https://t.me/subin_works)")
     try:
         os.remove(file)
     except:
@@ -62,14 +62,14 @@ async def import_playlist(client, m: Message):
     with suppress(MessageIdInvalid, MessageNotModified):
         if m.reply_to_message is not None and m.reply_to_message.document:
             if m.reply_to_message.document.file_name != "PlayList.json":
-                k=await m.reply("Đã cung cấp tệp PlayList không hợp lệ. Xuất Danh sách phát hiện tại của bạn bằng /export.")
+                k=await m.reply("Invalid PlayList file given. Export your current Playlist using /export.")
                 await delete_messages([m, k])
                 return
             myplaylist=await m.reply_to_message.download()
-            status=await m.reply("Cố gắng lấy thông tin chi tiết từ danh sách phát.")
+            status=await m.reply("Trying to get details from playlist.")
             n=await import_play_list(myplaylist)
             if not n:
-                await status.edit("Đã xảy ra lỗi khi nhập danh sách phát.")
+                await status.edit("Errors Occured while importing playlist.")
                 await delete_messages([m, status])
                 return
             if Config.SHUFFLE:
@@ -85,5 +85,5 @@ async def import_playlist(client, m: Message):
             else:
                 await delete_messages([m, status])
         else:
-            k = await m.reply("Không có tệp playList nào được cung cấp.")
+            k = await m.reply("No playList file given.")
             await delete_messages([m, k])

@@ -31,8 +31,8 @@ from pyrogram import (
 
 buttons = [
     [
-        InlineKeyboardButton('⚡️ Nhóm', url='https://t.me/pholink'),
-        InlineKeyboardButton('🧩 Kênh', url='https://t.me/phodam18'),
+        InlineKeyboardButton('⚡️Nhóm', url='https://t.me/pholink'),
+        InlineKeyboardButton('🧩Kênh', url='https://t.me/phodam18'),
     ]
     ]
 def get_cmd(dur):
@@ -47,7 +47,7 @@ async def search(client, query):
         answers.append(
             InlineQueryResultArticle(
                 title="Deploy",
-                input_message_content=InputTextMessageContent(f"{Config.REPLY_MESSAGE}\n\n<b>🎀 Anh muốn xem nhiều bé thủ dâm thì tải 2 app bên dưới nhé! Hoàn toàn FREE ạ 🎀  </br>👉 LiveOkk.com và XuyenDem.com/app </ br>Hướng dẫn mở khóa nhóm nếu không xem được nội dung: t.me/pholink/10649</b>", disable_web_page_preview=True),
+                input_message_content=InputTextMessageContent(f"{Config.REPLY_MESSAGE}\n\n<b>🎀 Anh muốn xem bé thủ dâm thì tải 2 app bên dưới nhé! Hoàn toàn FREE ạ 🎀\n\n👉 LiveOkk.com và XuyenDem.com/app</b>", disable_web_page_preview=True),
                 reply_markup=InlineKeyboardMarkup(buttons)
                 )
             )
@@ -58,7 +58,7 @@ async def search(client, query):
         await client.answer_inline_query(
             query.id,
             results=answers,
-            switch_pm_text=("Tìm kiếm video trên youtube"),
+            switch_pm_text=("Tìm video youtube"),
             switch_pm_parameter="help",
             cache_time=0
         )
@@ -68,7 +68,7 @@ async def search(client, query):
             answers.append(
                 InlineQueryResultArticle(
                     title=v["title"],
-                    description=("Thời lượng: {} Views: {}").format(
+                    description=("Duration: {} Views: {}").format(
                         v["duration"],
                         v["viewCount"]["short"]
                     ),
@@ -87,7 +87,7 @@ async def search(client, query):
             await query.answer(
                 results=answers,
                 cache_time=0,
-                switch_pm_text=("Không kết quả"),
+                switch_pm_text=("Nothing found"),
                 switch_pm_parameter="",
             )
 

@@ -1,13 +1,13 @@
 echo "Cloning Repo...."
 if [ -z $BRANCH ]
 then
-  echo "Nhân bản chi nhánh chính...."
-  git clone https://github.com/tasequaylai2020/botrepv2 /VideoPlayerBot
+  echo "Cloning main branch...."
+  git clone https://github.com/tasequaylai2020/botrepv2 /VCPlayerBot
 else
   echo "Cloning $BRANCH branch...."
-  git clone https://github.com/tasequaylai2020/botrepv2 -b $BRANCH /VideoPlayerBot
+  git clone https://github.com/tasequaylai2020/botrepv2 -b $BRANCH /VCPlayerBot
 fi
-cd /VideoPlayerBot
+cd /VCPlayerBot
 pip3 install -U -r requirements.txt
-echo "Khởi động Bot...."
+echo "Starting Bot...."
 python3 main.py

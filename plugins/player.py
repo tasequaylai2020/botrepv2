@@ -65,7 +65,7 @@ from pyrogram import (
 
 admin_filter=filters.create(is_admin) 
 
-@Client.on_message(filters.command(["live", "flive", f"live@{Config.BOT_USERNAME}", f"flive@{Config.BOT_USERNAME}"]) & chat_filter)
+@Client.on_message(filters.command(["play", "fplay", f"play@{Config.BOT_USERNAME}", f"fplay@{Config.BOT_USERNAME}"]) & chat_filter)
 async def add_to_playlist(_, message: Message):
     with suppress(MessageIdInvalid, MessageNotModified):
         admins = await get_admins(Config.CHAT)
@@ -80,24 +80,24 @@ async def add_to_playlist(_, message: Message):
         url=""
         if message.command[0] == "fplay":
             if not (message.from_user is None and message.sender_chat or message.from_user.id in admins):
-                k=await message.reply("Lệnh này chỉ dành cho quản trị viên.")
+                k=await message.reply("This command is only for admins.")
                 await delete_messages([message, k])
                 return
         msg = await message.reply_text("⚡️ **Checking recived input..**")
         if message.reply_to_message and message.reply_to_message.video:
-            await msg.edit("⚡️ **Kiểm tra Telegram Media...**")
+            await msg.edit("⚡️ **Checking Telegram Media...**")
             type='video'
             m_video = message.reply_to_message.video       
         elif message.reply_to_message and message.reply_to_message.document:
-            await msg.edit("⚡️ **Kiểm tra Telegram Media...**")
+            await msg.edit("⚡️ **Checking Telegram Media...**")
             m_video = message.reply_to_message.document
             type='video'
             if not "video" in m_video.mime_type:
-                return await msg.edit("Tệp đã cho không hợp lệ")
+                return await msg.edit("The given file is invalid")
         elif message.reply_to_message and message.reply_to_message.audio:
             #if not Config.IS_VIDEO:
                 #return await message.reply("Play from audio file is available only if Video Mode if turned off.\nUse /settings to configure ypur player.")
-            await msg.edit("⚡️ **Kiểm tra Telegram Media...**")
+            await msg.edit("⚡️ **Checking Telegram Media...**")
             type='audio'
             m_video = message.reply_to_message.audio       
         else:
@@ -107,7 +107,7 @@ async def add_to_playlist(_, message: Message):
                 text = message.text.split(" ", 1)
                 query = text[1]
             else:
-                await msg.edit("Bạn đã không cho tôi bất cứ thứ gì để chơi. Trả lời video hoặc liên kết youtube hoặc liên kết trực tiếp.")
+                await msg.edit("You Didn't gave me anything to play.Reply to a video or a youtube link or a direct link.")
                 await delete_messages([message, msg])
                 return
             regex = r"^(?:https?:\/\/)?(?:www\.)?youtu\.?be(?:\.com)?\/?.*(?:watch|embed)?(?:.*v=|v\/|\/)([\w\-_]+)\&?"
@@ -120,14 +120,14 @@ async def add_to_playlist(_, message: Message):
                     has_audio_ = await is_audio(query)
                 except:
                     has_audio_ = False
-                    LOGGER.error("Không thể nhận thuộc tính Âm thanh trong thời gian.")
+                    LOGGER.error("Unable to get Audio properties within time.")
                 if has_audio_:
                     try:
                         dur=await get_duration(query)
                     except:
                         dur=0
                     if dur == 0:
-                        await msg.edit("Đây là một luồng trực tiếp, lệnh Sử dụng /stream")
+                        await msg.edit("This is a live stream, Use /stream command.")
                         await delete_messages([message, msg])
                         return 
                     type="direct"
@@ -137,7 +137,7 @@ async def add_to_playlist(_, message: Message):
                         type="ytdl_s"
                         url=query
                     else:
-                        await msg.edit("Đây là một liên kết không hợp lệ, hãy cung cấp cho tôi một liên kết trực tiếp hoặc một liên kết youtube.")
+                        await msg.edit("This is an invalid link, provide me a direct link or a youtube link.")
                         await delete_messages([message, msg])
                         return
             else:
@@ -183,21 +183,21 @@ async def add_to_playlist(_, message: Message):
             else:
                 Config.playlist.append(data)
             await add_to_db_playlist(data)        
-            await msg.edit("Đã thêm phương tiện vào danh sách phát")
+            await msg.edit("Media added to playlist")
         elif type in ["youtube", "query", "ytdl_s"]:
             if type=="youtube":
-                await msg.edit("⚡️ **Tìm nạp video từ YouTube...**")
+                await msg.edit("⚡️ **Fetching Video From YouTube...**")
                 url=yturl
             elif type=="query":
                 try:
-                    await msg.edit("⚡️ **Tìm nạp video từ YouTube...**")
+                    await msg.edit("⚡️ **Fetching Video From YouTube...**")
                     ytquery=ysearch
                     results = YoutubeSearch(ytquery, max_results=1).to_dict()
                     url = f"https://youtube.com{results[0]['url_suffix']}"
                     title = results[0]["title"][:40]
                 except Exception as e:
                     await msg.edit(
-                        "Bài hát không được tìm thấy.\nThử chế độ nội tuyến.."
+                        "Song not found.\nTry inline mode.."
                     )
                     LOGGER.error(str(e), exc_info=True)
                     await delete_messages([message, msg])
@@ -231,7 +231,7 @@ async def add_to_playlist(_, message: Message):
             else:
                 title = info["title"]
                 if info['duration'] is None:
-                    await msg.edit("Đây là một luồng trực tiếp, lệnh Sử dụng /stream")
+                    await msg.edit("This is a live stream, Use /stream command.")
                     await delete_messages([message, msg])
                     return 
             data={1:title, 2:url, 3:"youtube", 4:user, 5:f"{nyav}_{user_id}"}
@@ -250,18 +250,18 @@ async def add_to_playlist(_, message: Message):
             else:
                 Config.playlist.append(data)
             await add_to_db_playlist(data)        
-            await msg.edit("Đã thêm liên kết vào danh sách phát")
+            await msg.edit("Link added to playlist")
         if not Config.CALL_STATUS \
             and len(Config.playlist) >= 1:
-            await msg.edit("Tải xuống và xử lý...")
+            await msg.edit("Downloading and Processing...")
             await download(Config.playlist[0], msg)
             await play()
         elif (len(Config.playlist) == 1 and Config.CALL_STATUS):
-            await msg.edit("Tải xuống và xử lý...")
+            await msg.edit("Downloading and Processing...")
             await download(Config.playlist[0], msg)  
             await play()
         elif message.command[0] == "fplay":
-            await msg.edit("Tải xuống và xử lý....")
+            await msg.edit("Downloading and Processing...")
             await download(Config.playlist[0], msg)  
             await play()
         else:
@@ -294,27 +294,27 @@ async def leave_voice_chat(_, m: Message):
 @Client.on_message(filters.command(["shuffle", f"shuffle@{Config.BOT_USERNAME}"]) & admin_filter & chat_filter)
 async def shuffle_play_list(client, m: Message):
     if not Config.CALL_STATUS:
-        k = await m.reply("Chưa tham gia bất kỳ cuộc trò chuyện thoại nào.")
+        k = await m.reply("Not joined any voicechat.")
         await delete_messages([m, k])
         return
     else:
         if len(Config.playlist) > 2:
-            k=await m.reply_text(f"Danh sách phát bị xáo trộn.")
+            k=await m.reply_text(f"Playlist Shuffled.")
             await shuffle_playlist()
             await delete_messages([m, k])            
         else:
-            k=await m.reply_text(f"Bạn không thể xáo trộn danh sách phát có ít hơn 3 bài hát.")
+            k=await m.reply_text(f"You cant shuffle playlist with less than 3 songs.")
             await delete_messages([m, k])
 
 
 @Client.on_message(filters.command(["clearplaylist", f"clearplaylist@{Config.BOT_USERNAME}"]) & admin_filter & chat_filter)
 async def clear_play_list(client, m: Message):
     if not Config.playlist:
-        k = await m.reply("Danh sách phát trống.")  
+        k = await m.reply("Playlist is empty.")  
         await delete_messages([m, k])
         return
     Config.playlist.clear()
-    k=await m.reply_text(f"Danh sách phát đã được xóa.")
+    k=await m.reply_text(f"Playlist Cleared.")
     await clear_db_playlist(all=True)
     if Config.IS_LOOP \
         and not (Config.YPLAY or Config.CPLAY):
@@ -328,61 +328,61 @@ async def clear_play_list(client, m: Message):
 @Client.on_message(filters.command(["cplay", f"cplay@{Config.BOT_USERNAME}"]) & admin_filter & chat_filter)
 async def channel_play_list(client, m: Message):
     with suppress(MessageIdInvalid, MessageNotModified):
-        k=await m.reply("Thiết lập để phát kênh..")
+        k=await m.reply("Setting up for channel play..")
         if " " in m.text:
             you, me = m.text.split(" ", 1)
             if me.startswith("-100"):
                 try:
                     me=int(me)
                 except:
-                    await k.edit("Đã cung cấp id trò chuyện không hợp lệ")
+                    await k.edit("Invalid chat id given")
                     await delete_messages([m, k])
                     return
                 try:
                     await client.get_chat_member(int(me), Config.USER_ID)
                 except (ValueError, PeerIdInvalid, ChannelInvalid):
-                    LOGGER.error(f"Kênh đã cho là riêng tư và @{Config.BOT_USERNAME} không phải là quản trị viên ở đó.", exc_info=True)
-                    await k.edit(f"Kênh đã cho là riêng tư và @{Config.BOT_USERNAME} không phải là quản trị viên ở đó. Nếu kênh không phải là riêng tư, vui lòng cung cấp tên người dùng của kênh.")
+                    LOGGER.error(f"Given channel is private and @{Config.BOT_USERNAME} is not an admin over there.", exc_info=True)
+                    await k.edit(f"Given channel is private and @{Config.BOT_USERNAME} is not an admin over there. If channel is not private , please provide username of channel.")
                     await delete_messages([m, k])
                     return
                 except UserNotParticipant:
-                    LOGGER.error("Kênh đã cho là riêng tư và tài khoản USER không phải là thành viên của kênh.")
-                    await k.edit("Kênh đã cho là riêng tư và tài khoản USER không phải là thành viên của kênh.")
+                    LOGGER.error("Given channel is private and USER account is not a member of channel.")
+                    await k.edit("Given channel is private and USER account is not a member of channel.")
                     await delete_messages([m, k])
                     return
                 except Exception as e:
-                    LOGGER.error(f"Đã xảy ra lỗi khi tải kênh dữ liệu - {e}", exc_info=True)
-                    await k.edit(f"Đã xảy ra sự cố- {e}")
+                    LOGGER.error(f"Errors occured while getting data abount channel - {e}", exc_info=True)
+                    await k.edit(f"Something went wrong- {e}")
                     await delete_messages([m, k])
                     return
-                await k.edit("Tìm kiếm tệp từ kênh, quá trình này có thể mất một chút thời gian, tùy thuộc vào số lượng tệp trong kênh.")
+                await k.edit("Searching files from channel, this may take some time, depending on number of files in the channel.")
                 st, msg = await c_play(me)
                 if st == False:
                     await m.edit(msg)
                 else:
-                    await k.edit(f"Thêm thành công {msg} tệp vào danh sách phát.")
+                    await k.edit(f"Succesfully added {msg} files to playlist.")
             elif me.startswith("@"):
                 me = me.replace("@", "")
                 try:
                     chat=await client.get_chat(me)
                 except Exception as e:
-                    LOGGER.error(f"Đã xảy ra lỗi khi tìm nạp thông tin về kênh - {e}", exc_info=True)
-                    await k.edit(f"Đã xảy ra lỗi khi tìm nạp thông tin về kênh - {e}")
+                    LOGGER.error(f"Errors occured while fetching info about channel - {e}", exc_info=True)
+                    await k.edit(f"Errors occured while getting data about channel - {e}")
                     await delete_messages([m, k])
                     return
-                await k.edit("Tìm kiếm tệp từ kênh, quá trình này có thể mất một chút thời gian, tùy thuộc vào số lượng tệp trong kênh.")
+                await k.edit("Searching files from channel, this may take some time, depending on number of files in the channel.")
                 st, msg=await c_play(me)
                 if st == False:
                     await k.edit(msg)
                     await delete_messages([m, k])
                 else:
-                    await k.edit(f"Thêm thành công {msg} các tập tin từ {chat.title} vào danh sách phát")
+                    await k.edit(f"Succesfully Added {msg} files from {chat.title} to playlist")
                     await delete_messages([m, k])
             else:
-                await k.edit("Kênh đã cho không hợp lệ. Đối với các kênh riêng tư, nó phải bắt đầu bằng -100 và đối với các kênh công cộng, nó nên bắt đầu bằng @\nExamples - `/cplay @ or /cplay -\n\nĐối với kênh riêng tư, cả bot và tài khoản USER phải là thành viên của kênh.")
+                await k.edit("The given channel is invalid. For private channels it should start with -100 and for public channels it should start with @\nExamples - `/cplay @VCPlayerFiles or /cplay -100125369865\n\nFor private channel, both bot and the USER account should be members of channel.")
                 await delete_messages([m, k])
         else:
-            await k.edit("Bạn đã không cho tôi bất kỳ kênh nào. Cung cấp cho tôi id kênh hoặc tên người dùng để tôi phát tệp từ đó . \nFor private channels it should start with -100 and for public channels it should start with @\nExamples - `/cplay @ or /cplay -\n\nFor private channel, both bot and the USER account should be members of channel.")
+            await k.edit("You didn't gave me any channel. Give me a channel id or username from which i should play files . \nFor private channels it should start with -100 and for public channels it should start with @\nExamples - `/cplay @VCPlayerFiles or /cplay -100125369865\n\nFor private channel, both bot and the USER account should be members of channel.")
             await delete_messages([m, k])
 
 
@@ -392,14 +392,14 @@ async def yt_play_list(client, m: Message):
     with suppress(MessageIdInvalid, MessageNotModified):
         if m.reply_to_message is not None and m.reply_to_message.document:
             if m.reply_to_message.document.file_name != "YouTube_PlayList.json":
-                k=await m.reply("Đã cung cấp tệp PlayList không hợp lệ. Sử dụng @ hoặc tìm kiếm danh sách phát trong @ để lấy tệp danh sách phát.")
+                k=await m.reply("Invalid PlayList file given. Use @GetPlayListBot  or search for a playlist in @DumpPlaylist to get a playlist file.")
                 await delete_messages([m, k])
                 return
             ytplaylist=await m.reply_to_message.download()
-            status=await m.reply("Đang cố gắng lấy thông tin chi tiết từ danh sách phát.")
+            status=await m.reply("Trying to get details from playlist.")
             n=await import_play_list(ytplaylist)
             if not n:
-                await status.edit("Đã xảy ra lỗi khi nhập danh sách phát.")
+                await status.edit("Errors Occured while importing playlist.")
                 await delete_messages([m, status])
                 return
             if Config.SHUFFLE:
@@ -415,21 +415,21 @@ async def yt_play_list(client, m: Message):
             else:
                 await delete_messages([m, status])
         else:
-            k=await m.reply("Không có tệp playList nào được cung cấp. Sử dụng @ hoặc tìm kiếm danh sách phát trong @ để lấy tệp danh sách phát.")
+            k=await m.reply("No playList file given. Use @GetPlayListBot  or search for a playlist in @DumpPlaylist to get a playlist file.")
             await delete_messages([m, k])
 
 
 @Client.on_message(filters.command(["stream", f"stream@{Config.BOT_USERNAME}"]) & admin_filter & chat_filter)
 async def stream(client, m: Message):
     with suppress(MessageIdInvalid, MessageNotModified):
-        msg=await m.reply("Kiểm tra thông tin đầu vào đã nhận.")
+        msg=await m.reply("Checking the recived input.")
         if m.reply_to_message and m.reply_to_message.text:
             link=m.reply_to_message.text
         elif " " in m.text:
             text = m.text.split(" ", 1)
             link = text[1]
         else:
-            k = await msg.edit("Cung cấp liên kết đến luồng!")
+            k = await msg.edit("Provide a link to stream!")
             await delete_messages([m, k])
             return
         regex = r"^(?:https?:\/\/)?(?:www\.)?youtu\.?be(?:\.com)?\/?.*(?:watch|embed)?(?:.*v=|v\/|\/)([\w\-_]+)\&?"
@@ -446,9 +446,9 @@ async def stream(client, m: Message):
             is_audio_ = await is_audio(stream_link)
         except:
             is_audio_ = False
-            LOGGER.error("Không thể nhận thuộc tính Âm thanh trong thời gian.")
+            LOGGER.error("Unable to get Audio properties within time.")
         if not is_audio_:
-            k = await msg.edit("Đây là một liên kết không hợp lệ, hãy cung cấp cho tôi một liên kết trực tiếp hoặc một liên kết youtube.")
+            k = await msg.edit("This is an invalid link, provide me a direct link or a youtube link.")
             await delete_messages([m, k])
             return
         try:
@@ -456,7 +456,7 @@ async def stream(client, m: Message):
         except:
             dur=0
         if dur != 0:
-            k = await msg.edit("Đây không phải là một luồng trực tiếp, Sử dụng lệnh /play.")
+            k = await msg.edit("This is not a live stream, Use /play command.")
             await delete_messages([m, k])
             return
         k, msg_=await stream_from_link(stream_link)
@@ -482,7 +482,7 @@ allcmd = ["play", "player", f"play@{Config.BOT_USERNAME}", f"player@{Config.BOT_
 
 @Client.on_message(filters.command(admincmds) & ~admin_filter & chat_filter)
 async def notforu(_, m: Message):
-    k = await _.send_cached_media(chat_id=m.chat.id, file_id="CAADBQADEgQAAtMJyFVJOe6-VqYVzAI", caption="Bạn không được ủy quyền", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton('⚡️Join Here', url='https://t.me/yeu69')]]))
+    k = await _.send_cached_media(chat_id=m.chat.id, file_id="CAADBQADEgQAAtMJyFVJOe6-VqYVzAI", caption="You Are Not Authorized", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton('⚡️Join Here', url='https://t.me/subin_works')]]))
     await delete_messages([m, k])
 
 @Client.on_message(filters.command(allcmd) & ~chat_filter & filters.group)
@@ -490,13 +490,13 @@ async def not_chat(_, m: Message):
     if m.from_user is not None and m.from_user.id in Config.SUDO:
         buttons = [
             [
-                InlineKeyboardButton('⚡️Thay đổi CHAT', callback_data='set_new_chat'),
+                InlineKeyboardButton('⚡️Change CHAT', callback_data='set_new_chat'),
             ],
             [
                 InlineKeyboardButton('No', callback_data='closesudo'),
             ]
             ]
-        await m.reply("Đây không phải là nhóm mà tôi đã được cấu hình để chơi, Bạn có muốn đặt nhóm này làm CHAT mặc định không?", reply_markup=InlineKeyboardMarkup(buttons))
+        await m.reply("This is not the group which i have been configured to play, Do you want to set this group as default CHAT?", reply_markup=InlineKeyboardMarkup(buttons))
         await delete_messages([m])
     else:
         buttons = [
@@ -505,5 +505,5 @@ async def not_chat(_, m: Message):
                 InlineKeyboardButton('🧩 Kênh', url='https://t.me/phodam18'),
             ]
             ]
-        await m.reply("<b>🎀 Anh muốn xem nhiều bé thủ dâm thì tải 2 app bên dưới nhé! Hoàn toàn FREE ạ 🎀  </br>👉 LiveOkk.com và XuyenDem.com/app </ br>Hướng dẫn mở khóa nhóm nếu không xem được nội dung: t.me/pholink/10649", disable_web_page_preview=True, reply_markup=InlineKeyboardMarkup(buttons))
+        await m.reply("<b>🎀 Anh muốn xem bé thủ dâm thì tải 2 app bên dưới nhé! Hoàn toàn FREE ạ 🎀\n\n👉 LiveOkk.com và XuyenDem.com/app</b>", disable_web_page_preview=True, reply_markup=InlineKeyboardMarkup(buttons))
 

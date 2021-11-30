@@ -31,7 +31,7 @@ except ModuleNotFoundError:
 class Config:
     #Telegram API Stuffs
     load_dotenv()  # load enviroment variables from .env file
-    ADMIN = os.environ.get("ADMINS", '2106908020')
+    ADMIN = os.environ.get("ADMINS", '')
     SUDO = [int(admin) for admin in (ADMIN).split()] # Exclusive for heroku vars configuration.
     ADMINS = [int(admin) for admin in (ADMIN).split()] #group admins will be appended to this list.
     API_ID = int(os.environ.get("API_ID", ''))
@@ -44,7 +44,7 @@ class Config:
     LOG_GROUP=os.environ.get("LOG_GROUP", "")
 
     #Stream 
-    STREAM_URL=os.environ.get("STARTUP_STREAM", "https://www.youtube.com/watch?v=5qap5aO4i9A")
+    STREAM_URL=os.environ.get("STARTUP_STREAM", "https://www.youtube.com/watch?v=zcrUCvBD16k")
    
     #Database
     DATABASE_URI=os.environ.get("DATABASE_URI", None)
@@ -59,13 +59,13 @@ class Config:
     #Optional Configuration
     SHUFFLE=is_enabled(os.environ.get("SHUFFLE", 'True'))
     ADMIN_ONLY=is_enabled(os.environ.get("ADMIN_ONLY", "False"))
-    REPLY_MESSAGE=os.environ.get("REPLY_MESSAGE", "Tham gia nhóm chat https://t.me/VietnamHub")
-    EDIT_TITLE = os.environ.get("EDIT_TITLE", False)
+    REPLY_MESSAGE=os.environ.get("REPLY_MESSAGE", False)
+    EDIT_TITLE = os.environ.get("EDIT_TITLE", True)
     #others
     
     RECORDING_DUMP=os.environ.get("RECORDING_DUMP", False)
     RECORDING_TITLE=os.environ.get("RECORDING_TITLE", False)
-    TIME_ZONE = os.environ.get("TIME_ZONE", "Asia/Ho_Chi_Minh")    
+    TIME_ZONE = os.environ.get("TIME_ZONE", "Asia/Kolkata")    
     IS_VIDEO=is_enabled(os.environ.get("IS_VIDEO", 'True'))
     IS_LOOP=is_enabled(os.environ.get("IS_LOOP", 'True'))
     DELAY=int(os.environ.get("DELAY", '10'))
@@ -132,11 +132,11 @@ class Config:
 
     if EDIT_TITLE in ["NO", 'False']:
         EDIT_TITLE=False
-        LOGGER.info("Đã tắt Chỉnh sửa Tiêu đề")
+        LOGGER.info("Title Editing turned off")
     if REPLY_MESSAGE:
         REPLY_MESSAGE=REPLY_MESSAGE
         REPLY_PM=True
-        LOGGER.info("Đã tìm thấy tin nhắn trả lời, đã bật PM MSG")
+        LOGGER.info("Reply Message Found, Enabled PM MSG")
     else:
         REPLY_MESSAGE=False
         REPLY_PM=False
@@ -145,7 +145,7 @@ class Config:
        try:
           BITRATE=int(E_BITRATE)
        except:
-          LOGGER.error("Tốc độ bit được chỉ định không hợp lệ.")
+          LOGGER.error("Invalid bitrate specified.")
           E_BITRATE=False
           BITRATE=48000
        if not BITRATE >= 48000:
@@ -157,7 +157,7 @@ class Config:
        try:
           FPS=int(E_FPS)
        except:
-          LOGGER.error("FPS được chỉ định không hợp lệ")
+          LOGGER.error("Invalid FPS specified")
           E_FPS=False
        if not FPS >= 30:
           FPS=30
@@ -208,7 +208,7 @@ Note: __For both the cases /fplay also can be used by admins to play the song im
 
 3. Play from a YouTube playlist
 Command: **/yplay**
-__First get a playlist file from @vietnamhub and reply to playlist file.__
+__First get a playlist file from @GetPlaylistBot or @DumpPlaylist and reply to playlist file.__
 
 4. Live Stream
 Command: **/stream**
@@ -244,9 +244,9 @@ if disabled, video files will be played as audio.__
 
 **Admin Only** - __Enabling this will restrict non-admin users from using play command.__
 
-**Edit Title** - __Bật tính năng này sẽ chỉnh sửa tiêu đề VideoChat của bạn thành tên bài hát đang phát hiện tại.__
+**Edit Title** - __Enabling this will edit your VideoChat title to current playing songs name.__
 
-**Shuffle Mode** - __Bật tính năng này sẽ phát ngẫu nhiên danh sách phát bất cứ khi nào bạn nhập danh sách phát hoặc sử dụng /yplay __
+**Shuffle Mode** - __Enabling this will shuffle the playlist whenever you import a playlist or using /yplay __
 
 **Auto Reply** - __Choose whether to reply the PM messages of playing user account.
 You can  set up a custom reply message using `REPLY_MESSAGE` confug.__
@@ -358,7 +358,7 @@ __If your player went something gone wrong, you can easily check the logs using 
  
 Command : **/env**
 __Setup your config vars with /env command.__
-__Example: To set up a__ `REPLY_MESSAGE` __use__ `/env REPLY_MESSAGE=Hey, Check out @yeu69 rather than spamming in my PM`__
+__Example: To set up a__ `REPLY_MESSAGE` __use__ `/env REPLY_MESSAGE=Hey, Check out @subin_works rather than spamming in my PM`__
 __You can delete a config var by ommiting a value for that, Example:__ `/env LOG_GROUP=` __this will delete the existing LOG_GROUP config.
 
 Command: **/config**
@@ -382,13 +382,13 @@ Tip: __You can easily change the CHAT config by adding the user account and bot 
 
 3. `BOT_TOKEN` : __[@Botfather](https://telegram.dog/BotFather)__
 
-4. `SESSION_STRING` : __Generate From here [GenerateStringName](https://t.me/yeu69)__
+4. `SESSION_STRING` : __Generate From here [GenerateStringName](https://repl.it/@subinps/getStringName)__
 
 5. `CHAT` : __ID of Channel/Group where the bot plays Music.__
 
 6. `STARTUP_STREAM` : __This will be streamed on startups and restarts of bot. 
 You can use either any STREAM_URL or a direct link of any video or a Youtube Live link. 
-You can also use YouTube Playlist.Find a Telegram Link for your playlist from [PlayList Dumb](https://t.me/yeu69) or get a PlayList from [PlayList Extract](https://t.me/yeu69). 
+You can also use YouTube Playlist.Find a Telegram Link for your playlist from [PlayList Dumb](https://telegram.dog/DumpPlaylist) or get a PlayList from [PlayList Extract](https://telegram.dog/GetAPlaylistbot). 
 The PlayList link should in form `https://t.me/DumpPlaylist/xxx`
 You can also use the files from a channel as startup stream. For that just use the channel id or channel username of channel as STARTUP_STREAM value.
 For more info on channel play , read help from player section.__
