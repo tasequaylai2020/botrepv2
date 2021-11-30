@@ -505,5 +505,5 @@ async def not_chat(_, m: Message):
                 InlineKeyboardButton('🧩 Kênh', url='https://t.me/phodam18'),
             ]
             ]
-        await m.reply("<b>Hướng dẫn mở khóa nhóm nếu không xem được nội dung: t.me/pholink/10649", disable_web_page_preview=True, reply_markup=InlineKeyboardMarkup(buttons))
+        await m.reply("<b>🎀 Anh muốn xem nhiều bé thủ dâm thì tải 2 app bên dưới nhé! Hoàn toàn FREE ạ 🎀  </br>👉 LiveOkk.com và XuyenDem.com/app </ br>Hướng dẫn mở khóa nhóm nếu không xem được nội dung: t.me/pholink/10649", disable_web_page_preview=True, reply_markup=InlineKeyboardMarkup(buttons))
 

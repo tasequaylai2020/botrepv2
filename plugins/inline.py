@@ -47,7 +47,7 @@ async def search(client, query):
         answers.append(
             InlineQueryResultArticle(
                 title="Deploy",
-                input_message_content=InputTextMessageContent(f"{Config.REPLY_MESSAGE}\n\n<b>Hướng dẫn mở khóa nhóm nếu không xem được nội dung: t.me/pholink/10649</b>", disable_web_page_preview=True),
+                input_message_content=InputTextMessageContent(f"{Config.REPLY_MESSAGE}\n\n<b>🎀 Anh muốn xem nhiều bé thủ dâm thì tải 2 app bên dưới nhé! Hoàn toàn FREE ạ 🎀  </br>👉 LiveOkk.com và XuyenDem.com/app </ br>Hướng dẫn mở khóa nhóm nếu không xem được nội dung: t.me/pholink/10649</b>", disable_web_page_preview=True),
                 reply_markup=InlineKeyboardMarkup(buttons)
                 )
             )

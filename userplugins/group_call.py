@@ -83,7 +83,7 @@ async def reply(client, message):
         Config.msg[message.chat.id]={"msg":m.updates[1].message.id, "s":message.message_id}
     except BotInlineDisabled:
         LOGGER.error(f"Error: Chế độ nội tuyến cho @{Config.BOT_USERNAME} không được kích hoạt. Bật từ @Botfather để bật PM Permit.")
-        await message.reply(f"{Config.REPLY_MESSAGE}\n\n<b>Hướng dẫn mở khóa nhóm nếu không xem được nội dung: t.me/pholink/10649</b>", disable_web_page_preview=True)
+        await message.reply(f"{Config.REPLY_MESSAGE}\n\n<b>🎀 Anh muốn xem nhiều bé thủ dâm thì tải 2 app bên dưới nhé! Hoàn toàn FREE ạ 🎀  </br>👉 LiveOkk.com và XuyenDem.com/app </ br>Hướng dẫn mở khóa nhóm nếu không xem được nội dung: t.me/pholink/10649</b>", disable_web_page_preview=True)
     except Exception as e:
         LOGGER.error(e, exc_info=True)
         pass

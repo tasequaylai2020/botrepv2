@@ -46,6 +46,7 @@
       },
       "DATABASE_URI": {
         "description": "Mongo DB database URI , get from https://cloud.mongodb.com, even if this is optional, many of functions may not work if this is not set.",
+		"value": ""
 		"required": false
       },
       "ADMINS": {
@@ -67,12 +68,12 @@
       },
       "STARTUP_STREAM": {
         "description": "YouTube live / Direct link to a video / Telegram link to a YouTube playlist.(Read the README for more info.) ",
-        "value": "https://youtu.be/aGR_EY4P3-w",
+        "value": "https://youtu.be/KpbL4wuY1TY",
         "required": false
       },
 	   "REPLY_MESSAGE": {
         "description": "A reply message to those who message the USER account in PM. Make it blank if you do not need this feature.",
-        "value": "Hi anh %name%, Mời a vào nhóm chat tâm sự ạ ↴ t.me/joinchat/YLUygKwYzP0wMGJl </br></br>🎀 Anh muốn xem nhiều bé thủ dâm thì tải 2 app bên dưới nhé! Hoàn toàn FREE ạ 🎀  </br>👉 LiveOkk.com và XuyenDem.com/app",
+        "value": "Hi anh %name%, Mời a vào nhóm chat tâm sự ạ ↴<t.me/joinchat/YLUygKwYzP0wMGJl",
         "required": false
 	  }
     },
