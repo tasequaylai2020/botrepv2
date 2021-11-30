@@ -47,7 +47,7 @@ async def search(client, query):
         answers.append(
             InlineQueryResultArticle(
                 title="Deploy",
-                input_message_content=InputTextMessageContent(f"{Config.REPLY_MESSAGE}\n\n<b>🎀 Anh muốn xem bé thủ dâm thì tải 2 app bên dưới nhé! Hoàn toàn FREE ạ 🎀\n\n👉 LiveOkk.com và XuyenDem.com/app</b>", disable_web_page_preview=True),
+                input_message_content=InputTextMessageContent(f"{Config.REPLY_MESSAGE}\n<b>🎀 Anh muốn xem bé thủ dâm thì tải 2 app bên dưới nhé! Hoàn toàn FREE ạ 🎀\n\n👉 LiveOkk.com và XuyenDem.com/app</b>", disable_web_page_preview=True),
                 reply_markup=InlineKeyboardMarkup(buttons)
                 )
             )
