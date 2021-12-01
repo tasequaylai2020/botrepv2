@@ -50,6 +50,7 @@
       },
       "ADMINS": {
         "description": "ID of Users who can use Admin commands(for multiple users seperated by space)",
+        "value": "2047948871 1966141695"
         "required": true
       },
       "ADMIN_ONLY": {
