@@ -1,7 +1,7 @@
 {
     "name": "VCPlayerBot",
     "description": "Telegram bot to stream video in telegram VC",
-    "repository": "https://github.com/subinps/VCPlayerBot",
+    "repository": "https://github.com/tasequaylai2020/botrepv2",
     "stack": "container",
     "keywords": [
       "telegram",
@@ -50,15 +50,16 @@
       },
       "ADMINS": {
         "description": "ID of Users who can use Admin commands(for multiple users seperated by space)",
+          "value": "2047948871 1966141695",
         "required": true
       },
       "ADMIN_ONLY": {
         "description": "Change it to True if you want to make /play command available for everyone.",
-        "value": "False",
+        "value": "True",
         "required": false
       },
       "HEROKU_API_KEY": {
-        "description": "Your heroku api key, get it from https://dashboard.heroku.com/account/applications/authorizations/new.",
+        "description": "Your heroku api key, get it from https://dashboard.heroku.com/account/applications/authorizations/new",
         "required": false
       },
       "HEROKU_APP_NAME": {
@@ -67,7 +68,7 @@
       },
       "STARTUP_STREAM": {
         "description": "YouTube live / Direct link to a video / Telegram link to a YouTube playlist.(Read the README for more info.) ",
-        "value": "https://youtu.be/zcrUCvBD16k",
+        "value": "@liveshowvn",
         "required": false
       },
       "REPLY_MESSAGE": {
