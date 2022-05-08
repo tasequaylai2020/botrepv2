@@ -1,7 +1,7 @@
 {
     "name": "VCPlayerBot",
     "description": "Telegram bot to stream video in telegram VC",
-    "repository": "https://github.com/tasequaylai2020/botrepv2",
+    "repository": "https://github.com/subinps/VCPlayerBot",
     "stack": "container",
     "keywords": [
       "telegram",
@@ -50,7 +50,6 @@
       },
       "ADMINS": {
         "description": "ID of Users who can use Admin commands(for multiple users seperated by space)",
-        "value": "2047948871 1966141695",
         "required": true
       },
       "ADMIN_ONLY": {
@@ -68,12 +67,12 @@
       },
       "STARTUP_STREAM": {
         "description": "YouTube live / Direct link to a video / Telegram link to a YouTube playlist.(Read the README for more info.) ",
-        "value": "https://youtu.be/KpbL4wuY1TY",
+        "value": "https://youtu.be/zcrUCvBD16k",
         "required": false
       },
       "REPLY_MESSAGE": {
         "description": "A reply message to those who message the USER account in PM. Make it blank if you do not need this feature.",
-        "value": "Hi anh, Mời a vào nhóm chat tâm sự ạ ↴<t.me/joinchat/YLUygKwYzP0wMGJl",
+        "value": "Hey, Iam a bot to play music, not having time to chat with you.",
         "required": false
       }
     },
